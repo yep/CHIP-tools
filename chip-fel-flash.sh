@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "BUILDROOT_BUILD_DIR = $BUILDROOT_BUILD_DIR"
+echo "BUILDROOT_OUTPUT_DIR = $BUILDROOT_OUTPUT_DIR"
 
 NAND_ERASE_BB=false
 if [ "$1" == "erase-bb" ]; then
@@ -13,13 +13,13 @@ PADDED_SPL_SIZE=0
 UBOOT_SCRIPT="$TMPDIR/uboot.scr"
 UBOOT_SCRIPT_MEM_ADDR=0x43100000
 UBOOT_SCRIPT_SRC="$TMPDIR/uboot.cmds"
-SPL="$BUILDROOT_BUILD_DIR/images/sunxi-spl.bin"
+SPL="$BUILDROOT_OUTPUT_DIR/images/sunxi-spl.bin"
 SPL_MEM_ADDR=0x43000000
-UBOOT="$BUILDROOT_BUILD_DIR/images/u-boot-dtb.bin"
+UBOOT="$BUILDROOT_OUTPUT_DIR/images/u-boot-dtb.bin"
 PADDED_UBOOT="$TMPDIR/padded-uboot"
 PADDED_UBOOT_SIZE=0
 UBOOT_MEM_ADDR=0x4a000000
-UBI="$BUILDROOT_BUILD_DIR/images/rootfs.ubi"
+UBI="$BUILDROOT_OUTPUT_DIR/images/rootfs.ubi"
 UBI_MEM_ADDR=0x44000000
 UBI_SIZE=`stat --printf="%s" $UBI | xargs printf "0x%08x"`
 
