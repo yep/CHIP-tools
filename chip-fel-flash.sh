@@ -7,15 +7,16 @@ if [ "$1" == "erase-bb" ]; then
 	NAND_ERASE_BB=true
 fi
 
-PADDED_SPL="/tmp/sunxi-padded-spl"
+TMPDIR=`mktemp -d`
+PADDED_SPL="$TMPDIR/sunxi-padded-spl"
 PADDED_SPL_SIZE=0
-UBOOT_SCRIPT="/tmp/uboot.scr"
+UBOOT_SCRIPT="$TMPDIR/uboot.scr"
 UBOOT_SCRIPT_MEM_ADDR=0x43100000
-UBOOT_SCRIPT_SRC="/tmp/uboot.cmds"
+UBOOT_SCRIPT_SRC="$TMPDIR/uboot.cmds"
 SPL="$BUILDROOT_BUILD_DIR/images/sunxi-spl.bin"
 SPL_MEM_ADDR=0x43000000
 UBOOT="$BUILDROOT_BUILD_DIR/images/u-boot-dtb.bin"
-PADDED_UBOOT="/tmp/padded-uboot"
+PADDED_UBOOT="$TMPDIR/padded-uboot"
 PADDED_UBOOT_SIZE=0
 UBOOT_MEM_ADDR=0x4a000000
 UBI="$BUILDROOT_BUILD_DIR/images/rootfs.ubi"
@@ -91,3 +92,5 @@ fel write $UBOOT_SCRIPT_MEM_ADDR $UBOOT_SCRIPT
 
 echo == execute the main u-boot binary ==
 fel exe $UBOOT_MEM_ADDR
+
+rm -rf $TMPDIR
