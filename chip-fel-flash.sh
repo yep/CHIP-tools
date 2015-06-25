@@ -30,6 +30,10 @@ prepare_images() {
 		rm $out
 	fi
 
+	# The BROM cannot read 16K pages: it only reads 8k of data at most.
+	# Split the SPL image in 8k chunks and pad each chunk with 8k of random
+	# data to limit the impact of repeated patterns on the MLC chip.
+
 	dd if=$in of=$out bs=8k count=1 skip=0 conv=sync
 	dd if=/dev/urandom of=$out bs=8k count=1 seek=1 conv=sync
 	dd if=$in of=$out bs=8k count=1 skip=1 seek=2 conv=sync
@@ -38,6 +42,7 @@ prepare_images() {
 	dd if=/dev/urandom of=$out bs=8k count=1 seek=5 conv=sync
 	PADDED_SPL_SIZE=`stat --printf="%s" $out | xargs printf "0x%08x"`
 
+	# Align the u-boot image on a page boundary
 	dd if=$UBOOT of=$PADDED_UBOOT bs=16k conv=sync
 	PADDED_UBOOT_SIZE=`stat --printf="%s" $PADDED_UBOOT | xargs printf "0x%08x"`
 }
