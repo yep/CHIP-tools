@@ -50,7 +50,7 @@ prepare_images() {
 
 prepare_uboot_script() {
 	if [ "$NAND_ERASE_BB" = true ] ; then
-		echo "nand scrub 0x0 0x200000000" > $UBOOT_SCRIPT_SRC
+		echo "nand scrub -y 0x0 0x200000000" > $UBOOT_SCRIPT_SRC
 	else
 		echo "nand erase 0x0 0x200000000" > $UBOOT_SCRIPT_SRC
 	fi
