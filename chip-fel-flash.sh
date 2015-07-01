@@ -7,7 +7,7 @@ if [ "$1" == "erase-bb" ]; then
 	NAND_ERASE_BB=true
 fi
 
-PATH=$PATH:$BUILDROOT_BUILD_DIR/host/usr/bin
+PATH=$PATH:$BUILDROOT_OUTPUT_DIR/host/usr/bin
 TMPDIR=`mktemp -d`
 PADDED_SPL="$TMPDIR/sunxi-padded-spl"
 PADDED_SPL_SIZE=0
