@@ -70,7 +70,8 @@ prepare_uboot_script() {
 	echo "setenv bootargs root=ubi0:rootfs rootfstype=ubifs rw earlyprintk ubi.mtd=4" >> $UBOOT_SCRIPT_SRC
 	echo "setenv bootcmd 'source \${scriptaddr}; mtdparts; ubi part UBI; ubifsmount ubi0:rootfs; ubifsload \$fdt_addr_r /boot/sun5i-r8-chip.dtb; ubifsload \$kernel_addr_r /boot/zImage; bootz \$kernel_addr_r - \$fdt_addr_r'" >> $UBOOT_SCRIPT_SRC
 	echo "saveenv" >> $UBOOT_SCRIPT_SRC
-	echo "mtdparts; ubi part UBI; ubifsmount ubi0:rootfs; ubifsload \$fdt_addr_r /boot/sun5i-r8-chip.dtb; ubifsload \$kernel_addr_r /boot/zImage; bootz \$kernel_addr_r - \$fdt_addr_r" >> $UBOOT_SCRIPT_SRC
+	echo "mw \${scriptaddr} 0x0" >> $UBOOT_SCRIPT_SRC
+	echo "boot" >> $UBOOT_SCRIPT_SRC
 
 	mkimage -A arm -T script -C none -n "flash CHIP" -d $UBOOT_SCRIPT_SRC $UBOOT_SCRIPT
 }
