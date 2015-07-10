@@ -23,6 +23,8 @@ UBOOT_MEM_ADDR=0x4a000000
 UBI="$BUILDROOT_OUTPUT_DIR/images/rootfs.ubi"
 UBI_MEM_ADDR=0x44000000
 UBI_SIZE=`stat --printf="%s" $UBI | xargs printf "0x%08x"`
+FEL="$BUILDROOT_OUTPUT_DIR/build/host-sunxi-tools-*/fel"
+MKIMAGE="$BUILDROOT_OUTPUT_DIR/build/uboot-*/tools/mkimage"
 
 prepare_images() {
 	local in=$SPL
@@ -73,7 +75,7 @@ prepare_uboot_script() {
 	echo "mw \${scriptaddr} 0x0" >> $UBOOT_SCRIPT_SRC
 	echo "boot" >> $UBOOT_SCRIPT_SRC
 
-	mkimage -A arm -T script -C none -n "flash CHIP" -d $UBOOT_SCRIPT_SRC $UBOOT_SCRIPT
+	$MKIMAGE -A arm -T script -C none -n "flash CHIP" -d $UBOOT_SCRIPT_SRC $UBOOT_SCRIPT
 }
 
 echo == preparing images ==
@@ -81,18 +83,18 @@ prepare_images
 prepare_uboot_script
 
 echo == upload the SPL to SRAM and execute it ==
-fel spl $SPL
+$FEL spl $SPL
 
 sleep 1 # wait for DRAM initialization to complete
 
 echo == upload images ==
-fel write $SPL_MEM_ADDR $PADDED_SPL
-fel write $UBOOT_MEM_ADDR $PADDED_UBOOT
-fel write $UBOOT_MEM_ADDR $PADDED_UBOOT
-fel write $UBI_MEM_ADDR $UBI
-fel write $UBOOT_SCRIPT_MEM_ADDR $UBOOT_SCRIPT
+$FEL write $SPL_MEM_ADDR $PADDED_SPL
+$FEL write $UBOOT_MEM_ADDR $PADDED_UBOOT
+$FEL write $UBOOT_MEM_ADDR $PADDED_UBOOT
+$FEL write $UBI_MEM_ADDR $UBI
+$FEL write $UBOOT_SCRIPT_MEM_ADDR $UBOOT_SCRIPT
 
 echo == execute the main u-boot binary ==
-fel exe $UBOOT_MEM_ADDR
+$FEL exe $UBOOT_MEM_ADDR
 
 rm -rf $TMPDIR
