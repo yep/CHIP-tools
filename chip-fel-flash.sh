@@ -90,7 +90,6 @@ sleep 1 # wait for DRAM initialization to complete
 echo == upload images ==
 fel write $SPL_MEM_ADDR $PADDED_SPL
 fel write $UBOOT_MEM_ADDR $PADDED_UBOOT
-fel write $UBOOT_MEM_ADDR $PADDED_UBOOT
 fel write $UBI_MEM_ADDR $UBI
 fel write $UBOOT_SCRIPT_MEM_ADDR $UBOOT_SCRIPT
 
