@@ -18,7 +18,7 @@ SPL="$BUILDROOT_OUTPUT_DIR/images/sunxi-spl.bin"
 SPL_MEM_ADDR=0x43000000
 UBOOT="$BUILDROOT_OUTPUT_DIR/images/u-boot-dtb.bin"
 PADDED_UBOOT="$TMPDIR/padded-uboot"
-PADDED_UBOOT_SIZE=0
+PADDED_UBOOT_SIZE=0xc0000
 UBOOT_MEM_ADDR=0x4a000000
 UBI="$BUILDROOT_OUTPUT_DIR/images/rootfs.ubi"
 UBI_MEM_ADDR=0x44000000
@@ -46,7 +46,8 @@ prepare_images() {
 
 	# Align the u-boot image on a page boundary
 	dd if=$UBOOT of=$PADDED_UBOOT bs=16k conv=sync
-	PADDED_UBOOT_SIZE=`stat --printf="%s" $PADDED_UBOOT | xargs printf "0x%08x"`
+	UBOOT_SIZE=`stat --printf="%s" $PADDED_UBOOT | xargs printf "0x%08x"`
+	dd if=/dev/urandom of=$PADDED_UBOOT seek=$((UBOOT_SIZE / 0x4000)) bs=16k count=$(((PADDED_UBOOT_SIZE - UBOOT_SIZE) / 0x4000))
 }
 
 prepare_uboot_script() {
