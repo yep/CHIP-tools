@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 SPL=$1
 UBOOT=$2
